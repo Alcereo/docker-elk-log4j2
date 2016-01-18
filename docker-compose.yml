@@ -4,13 +4,18 @@ elasticsearch:
   ports:
     - "9200:9200"
     - "9300:9300"
+    - "80:80"
+  volumes:
+    - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
 logstash:
   image: logstash:latest
-  command: logstash -f /etc/logstash/conf.d/logstash.conf
+  command: bash -c "plugin install /etc/logstash/conf.d/logstash-input-log4j2-5.2-java.gem && logstash -f /etc/logstash/conf.d/logstash.conf"
   volumes:
     - ./logstash/config:/etc/logstash/conf.d
+    - ./logstash/local_gems:/opt/logstash/vendor/local_gems #/5acd7b33/logstash-input-log4j2-5.2-java/vendor/log4j-api-2.1
   ports:
     - "5000:5000"
+    - "7000:7000"
   links:
     - elasticsearch
 kibana:
