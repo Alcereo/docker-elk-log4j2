@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.UUID;
 
 import org.apache.logging.log4j.EventLogger;
@@ -18,8 +19,10 @@ import org.apache.logging.log4j.message.StructuredDataMessage;
 
 
 public class EventLoggerMain {
-	String[] account = new String [] {"Peter Weck", "Anna Sacher", "Massimo Carisi",
-			"Helmut Berger", "Roberto Blanco", "Werner Heissenberg", "Lise Meitner", "Keiko Abe"};
+	private static NumberFormat numberFormat;
+
+	String[] account = new String [] {"Marlene Dietrich", "Anna Sacher", "Massimo Carisi",
+			"George Washington", "Pierre Boulez", "Werner Heissenberg", "Lise Meitner", "Keiko Abe"};
 
 	private Logger logger = LogManager.getLogger(EventLoggerMain.class.getName());
 	public EventLoggerMain() {
@@ -50,13 +53,27 @@ public class EventLoggerMain {
 		double amount = Math.random()*1000*1000;
 		msg.put("toAccount", account[i]);
         msg.put("fromAccount", account[j]);
-		msg.put("amount", String.valueOf(amount));
+		msg.put("amount", numberFormat.format(amount));
         msg.put("currency", "USD");
 		return msg;
 	}
 
 	public static void main(String[] args) {
-		String s = File.separator;
+		ConfigurationSource source = initLogger();
+		Configurator.initialize(null, source);
+
+		initNumberFormat();
+		
+		EventLoggerMain m= new EventLoggerMain();
+
+	}
+
+	private static void initNumberFormat() {
+		numberFormat = NumberFormat.getInstance();
+		numberFormat.setMaximumFractionDigits(2);
+	}
+
+	private static ConfigurationSource initLogger() {
 		String log4jConfigFile = "./log4j2.xml";
 		ConfigurationSource source=null;
 		try {
@@ -66,10 +83,7 @@ public class EventLoggerMain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Configurator.initialize(null, source);
-
-		EventLoggerMain m= new EventLoggerMain();
-
+		return source;
 	}
 
 }
