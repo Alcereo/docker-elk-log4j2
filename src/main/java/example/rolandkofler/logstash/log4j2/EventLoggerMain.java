@@ -1,6 +1,11 @@
+package example.rolandkofler.logstash.log4j2;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.UUID;
 
 import org.apache.logging.log4j.EventLogger;
@@ -13,9 +18,9 @@ import org.apache.logging.log4j.message.StructuredDataMessage;
 
 
 public class EventLoggerMain {
-	String[] account = new String [] {"Peter Weck", "Anna Sacher", "Massimo Carisi", 
+	String[] account = new String [] {"Peter Weck", "Anna Sacher", "Massimo Carisi",
 			"Helmut Berger", "Roberto Blanco", "Werner Heissenberg", "Lise Meitner", "Keiko Abe"};
-	
+
 	private Logger logger = LogManager.getLogger(EventLoggerMain.class.getName());
 	public EventLoggerMain() {
 		while(true) {
@@ -27,7 +32,7 @@ public class EventLoggerMain {
 			StructuredDataMessage msg = transferMoney();
 			//EventLogger.logEvent(msg);
 			logger.info(msg);
-			
+
 		}
 	}
 
@@ -49,20 +54,22 @@ public class EventLoggerMain {
         msg.put("currency", "USD");
 		return msg;
 	}
-	
+
 	public static void main(String[] args) {
 		String s = File.separator;
-		String log4jConfigFile = System.getProperty("user.dir") + s + "src"+s+"log4j2.xml";
+		String log4jConfigFile = "./log4j2.xml";
 		ConfigurationSource source=null;
 		try {
-			source = new ConfigurationSource(new FileInputStream(log4jConfigFile));
+			ClassLoader cl = EventLoggerMain.class.getClassLoader();
+			InputStream resource = cl.getResourceAsStream(log4jConfigFile);
+			source = new ConfigurationSource(new BufferedInputStream(resource));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		Configurator.initialize(null, source);
-						
+
 		EventLoggerMain m= new EventLoggerMain();
-		
+
 	}
 
 }

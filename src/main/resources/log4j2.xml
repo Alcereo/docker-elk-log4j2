@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <Socket name="A1" host="localhost" port="7000">
+        <Socket name="logstash" host="localhost" port="7000">
             <SerializedLayout />
         </Socket>
+        <Console name="local">
+        </Console>
     </Appenders>
     <Loggers>
         <Root level="debug">
-            <AppenderRef ref="A1"/>
+            <AppenderRef ref="logstash"/>
+            <AppenderRef ref="local" />
         </Root>
     </Loggers>
 </Configuration>
