@@ -26,7 +26,8 @@ public class EventLoggerMain {
 
 	private Logger logger = LogManager.getLogger(EventLoggerMain.class.getName());
 	public EventLoggerMain() {
-		while(true) {
+		int transactionCount = 10000;
+		for(;transactionCount>0; transactionCount--) {
 			long millis= getExponentiallyDistributedRandomVariable();
 			try {
 				Thread.sleep(millis);

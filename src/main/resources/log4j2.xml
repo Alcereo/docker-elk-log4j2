@@ -7,9 +7,6 @@
         <Console name="local">
         </Console>
     </Appenders>
-    <Async name="async-logstash">
-      <AppenderRef ref="logstash"/>
-    </Async>
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="logstash"/>
